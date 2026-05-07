@@ -39,8 +39,12 @@ def verwijderPizza(gerechtNaam):
     cursor.execute("DELETE FROM tbl_pizzas WHERE gerechtNaam = ?", (gerechtNaam,))
     print("Gerecht verwijderd uit 'tbl_pizzas':", gerechtNaam )
     db.commit()
+
+def pasGerechtAan(gerechtID, nieuweGerechtNaam, nieuwePrijs):
+    cursor.execute("UPDATE tbl_pizzas SET gerechtNaam = ?, gerechtPrijs = ? WHERE gerechtID = ?", (nieuweGerechtNaam, nieuwePrijs, gerechtID))
+    db.commit()
 ### --------- Hoofdprogramma  ---------------
 
 maakTabellenAan()
-verwijderPizza("Hawaii")
+
 printTabel("tbl_pizzas")
