@@ -21,7 +21,10 @@ def maakTabellenAan():
             gerechtID INTEGER PRIMARY KEY AUTOINCREMENT,
             gerechtNaam TEXT NOT NULL,
             gerechtPrijs REAL NOT NULL);""")
-    print("tbl_pizzas aangemaakt")
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS tbl_klanten(
+            klantNr INTEGER PRIMARY KEY AUTOINCREMENT,
+            klantAchternaam TEXT);""")
 
 def printTabel(tabel_naam):
     cursor.execute("SELECT * FROM " + tabel_naam)
@@ -40,11 +43,16 @@ def verwijderPizza(gerechtNaam):
     print("Gerecht verwijderd uit 'tbl_pizzas':", gerechtNaam )
     db.commit()
 
+def voegKlantToe(naam_nieuwe_klant):
+    cursor.execute("INSERT INTO tbl_klanten VALUES(NULL, ?)", (naam_nieuwe_klant,))
+    db.commit()
+    print("Klant toegevoegd:")
+
 def pasGerechtAan(gerechtID, nieuweGerechtNaam, nieuwePrijs):
     cursor.execute("UPDATE tbl_pizzas SET gerechtNaam = ?, gerechtPrijs = ? WHERE gerechtID = ?", (nieuweGerechtNaam, nieuwePrijs, gerechtID))
     db.commit()
 ### --------- Hoofdprogramma  ---------------
 
-maakTabellenAan()
-
-printTabel("tbl_pizzas")
+#maakTabellenAan()
+#verwijderTabellen()
+#voegKlantToe("")
