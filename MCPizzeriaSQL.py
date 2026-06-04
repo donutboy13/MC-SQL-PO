@@ -51,6 +51,22 @@ def voegKlantToe(naam_nieuwe_klant):
 def pasGerechtAan(gerechtID, nieuweGerechtNaam, nieuwePrijs):
     cursor.execute("UPDATE tbl_pizzas SET gerechtNaam = ?, gerechtPrijs = ? WHERE gerechtID = ?", (nieuweGerechtNaam, nieuwePrijs, gerechtID))
     db.commit()
+
+def zoekKlantInTabel(ingevoerde_klantnaam):
+    cursor.execute("SELECT * FROM tbl_klanten WHERE klantAchternaam = ?", ( ingevoerde_klantnaam, ) )
+    zoek_resultaat = cursor.fetchall()
+
+    if zoek_resultaat == []: 
+        print("Geen klant gevonden met achternaam", ingevoerde_klantnaam)
+        print("Klant wordt nu toegevoegd.")
+        cursor.execute("INSERT INTO tbl_klanten VALUES(NULL, ? )", (ingevoerde_klantnaam, ))
+        db.commit()
+        printTabel("tbl_klanten")
+        
+        cursor.execute("SELECT * FROM tbl_klanten WHERE klantAchternaam = ?", (ingevoerde_klantnaam, ) )
+        zoek_resultaat = cursor.fetchall()
+        
+    return zoek_resultaat
 ### --------- Hoofdprogramma  ---------------
 
 #maakTabellenAan()
