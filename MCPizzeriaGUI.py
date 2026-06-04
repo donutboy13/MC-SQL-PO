@@ -28,10 +28,15 @@ knopsluit.grid(row=17, column=4)
 labelintro = Label(venster, text="welcome")
 labelintro.grid(row=0, column=0, sticky="W")
 
+labelklant = Label(venster, text="klantnaam: ")
+labelklant.grid(row=1, column=0, sticky="W")
 
+ingevoerde_klantnaam = StringVar()
+invoerveldKlantnaam = Entry(venster, textvariable=ingevoerde_klantnaam)
+invoerveldKlantnaam.grid(row=1, column=1, sticky="W")
 
-
-
+invoerveldKlantNr = Entry(venster)
+invoerveldKlantNr.grid(row=2, column=1, sticky="W")
 
 
 
