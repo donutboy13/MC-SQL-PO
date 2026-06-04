@@ -25,6 +25,21 @@ def zoekKlant():
         invoerveldKlantnaam.insert(END, rij[1])
 
 
+def zoekPizza():
+    gevonden_pizza = MCPizzeriaSQL.zoekPizzaInTabel(ingevoerde_pizzanaam.get())
+    print(gevonden_pizza)
+
+    invoerveldPizza.delete(0, END)
+    for rij in gevonden_pizza: 
+        listBoxMenu.insert(END, rij)
+
+def toonMenuInListbox():
+    listBoxMenu.delete(0, END) #maak de listbox leeg
+    listBoxMenu.insert(0, "ID Gerecht Prijs")
+    pizza_tabel = MCPizzeriaSQL.vraagOpGegevensPizzaTabel()
+    for regel in pizza_tabel:
+        listBoxMenu.insert(END, regel)
+
 ### --------- Hoofdprogramma  ---------------
 
 venster = Tk()
@@ -53,10 +68,11 @@ knopZoekKlant.grid(row=1, column=4)
 pizzalabel = Label(venster, text="pizza naam:")
 pizzalabel.grid(row=3, column=0, sticky="W")
 
-invoerveldPizza = Entry(venster)
+ingevoerde_pizzanaam = StringVar()
+invoerveldPizza = Entry(venster, textvariable=ingevoerde_pizzanaam)
 invoerveldPizza.grid(row=3, column=1, sticky="W")
 
-knopZoekPizza = Button(venster, text="Zoek pizza", width=12)
+knopZoekPizza = Button(venster, text="Zoek pizza", width=12, command=zoekPizza)
 knopZoekPizza.grid(row=3, column=4)
 
 labelMogelijkheden = Label(venster, text="Mogelijkheden:")
@@ -65,7 +81,7 @@ labelMogelijkheden.grid(row=4, column=0)
 listBoxMenu = Listbox(venster, height=6, width=50)
 listBoxMenu.grid(row=4, column=1, rowspan=6, columnspan=2, sticky="W")
 
-knopToonPizza = Button(venster, text="Toon alle pizza's")
+knopToonPizza = Button(venster, text="Toon alle pizza's", command=toonMenuInListbox)
 knopToonPizza.grid(row=4, column=4)
 
 
