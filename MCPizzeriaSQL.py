@@ -21,10 +21,22 @@ def maakTabellenAan():
             gerechtID INTEGER PRIMARY KEY AUTOINCREMENT,
             gerechtNaam TEXT NOT NULL,
             gerechtPrijs REAL NOT NULL);""")
+    print("Tabel 'tbl_pizzas' aangemaakt.")
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS tbl_klanten(
             klantNr INTEGER PRIMARY KEY AUTOINCREMENT,
             klantAchternaam TEXT);""")
+    print("Tabel 'tbl_klanten' aangemaakt.")
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS tbl_winkelWagen(
+        bestelRegel INTEGER PRIMARY KEY AUTOINCREMENT,
+        klantNr INTEGER,
+        gerechtID INTEGER,
+        aantal INTEGER NOT NULL,
+        FOREIGN KEY (klantNr) REFERENCES tbl_klanten(klantNr)
+        FOREIGN KEY (gerechtID) REFERENCES tbl_pizzas(gerechtID)
+        );""")
+    print("Tabel 'tbl_winkelWagen' aangemaakt.")
 
 def printTabel(tabel_naam):
     cursor.execute("SELECT * FROM " + tabel_naam)
@@ -78,6 +90,18 @@ def vraagOpGegevensPizzaTabel():
     resultaat = cursor.fetchall()
     print("Tabel tbl_pizzas:", resultaat)
     return resultaat
+
+def voegToeAanWinkelWagen(klantNr, gerechID, aantal):
+    cursor.execute("INSERT INTO tbl_winkelWagen VALUES(NULL, ?, ?, ?)", (klantNr, gerechID, aantal,))
+    db.commit
+    printTabel("tbl_winkelWagen")
+
+def vraagOpGegevensWinkelWagenTabel():
+    cursor.execute("SELECT * FROM tbl_winkelWagen")
+    resultaat = cursor.fetchall()
+    return resultaat
+
+
 ### --------- Hoofdprogramma  ---------------
 
 #maakTabellenAan()

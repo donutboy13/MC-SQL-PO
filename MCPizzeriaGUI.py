@@ -50,6 +50,16 @@ def haalGeselecteerdeRijOp(event):
     #zet tekst in veld
     invoerveldGeselecteerdePizza.insert(0, geselecteerdeTekst)
 
+def voegToeAanWinkelWagen():
+    klantNr = invoerveldKlantNr.get()
+    gerechtID = selecteerdePizza.get()
+    aantal = aantalGekozen.get()
+    MCPizzeriaSQL.voegToeAanWinkelWagen(klantNr, gerechtID, aantal )
+    winkelwagen_tabel = MCPizzeriaSQL.vraagOpGegevensWinkelWagenTabel()
+    listboxWinkelWagen.delete(0, END) #listbox eerst even leeg maken
+    for regel in winkelwagen_tabel:
+        listboxWinkelWagen.insert(END, regel)
+
 ### --------- Hoofdprogramma  ---------------
 
 venster = Tk()
@@ -63,7 +73,7 @@ labelintro = Label(venster, text="welcome")
 labelintro.grid(row=0, column=0, sticky="W")
 
 labelklant = Label(venster, text="klantnaam: ")
-labelklant.grid(row=1, column=0, sticky="W")
+labelklant.grid(row=1, column=0, sticky="E")
 
 ingevoerde_klantnaam = StringVar()
 invoerveldKlantnaam = Entry(venster, textvariable=ingevoerde_klantnaam)
@@ -76,7 +86,7 @@ knopZoekKlant = Button(venster, text="zoek klant", width=12, command=zoekKlant)
 knopZoekKlant.grid(row=1, column=4)
 
 pizzalabel = Label(venster, text="pizza naam:")
-pizzalabel.grid(row=3, column=0, sticky="W")
+pizzalabel.grid(row=3, column=0, sticky="E")
 
 ingevoerde_pizzanaam = StringVar()
 invoerveldPizza = Entry(venster, textvariable=ingevoerde_pizzanaam)
@@ -86,7 +96,7 @@ knopZoekPizza = Button(venster, text="Zoek pizza", width=12, command=zoekPizza)
 knopZoekPizza.grid(row=3, column=4)
 
 labelMogelijkheden = Label(venster, text="Mogelijkheden:")
-labelMogelijkheden.grid(row=4, column=0)
+labelMogelijkheden.grid(row=4, column=0, sticky="E")
 
 listboxMenu = Listbox(venster, height=6, width=50)
 listboxMenu.grid(row=4, column=1, rowspan=6, columnspan=2, sticky="W")
@@ -107,6 +117,23 @@ labelPizzaSelecteerd.grid(row=10, column=0, sticky="W")
 selecteerdePizza = StringVar()
 invoerveldGeselecteerdePizza = Entry(venster, textvariable=selecteerdePizza)
 invoerveldGeselecteerdePizza.grid(row=10, column=1, sticky="W")
+
+labelPizzaAantal = Label(venster, text="Aantal:")
+labelPizzaAantal.grid(row=11, column=0, sticky="E")
+
+aantalGekozen = IntVar()
+aantalGekozen.set(1)
+optionMenuPizzaAantal = OptionMenu(venster, aantalGekozen, 1,2,3)
+optionMenuPizzaAantal.grid(row=11, column=1, sticky="W")
+
+knopVoegToe = Button(venster, text="Voeg toe", command=voegToeAanWinkelWagen)
+knopVoegToe.grid(row=11, column=2, sticky="W")
+
+labelBestelling = Label(venster, text="Bestelling:")
+labelBestelling.grid(row=12, column=0, sticky="E")
+
+listboxWinkelWagen = Listbox(venster, height=6, width=50)
+listboxWinkelWagen.grid(row=12, column=1, rowspan=6, sticky="NS")
 
 
 #reageert op gebruikersinvoer, deze regel als laatste laten staan
