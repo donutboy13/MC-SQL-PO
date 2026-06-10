@@ -31,14 +31,24 @@ def zoekPizza():
 
     invoerveldPizza.delete(0, END)
     for rij in gevonden_pizza: 
-        listBoxMenu.insert(END, rij)
+        listboxMenu.insert(END, rij)
 
 def toonMenuInListbox():
-    listBoxMenu.delete(0, END) #maak de listbox leeg
-    listBoxMenu.insert(0, "ID Gerecht Prijs")
+    listboxMenu.delete(0, END) #maak de listbox leeg
+    listboxMenu.insert(0, "ID Gerecht Prijs")
     pizza_tabel = MCPizzeriaSQL.vraagOpGegevensPizzaTabel()
     for regel in pizza_tabel:
-        listBoxMenu.insert(END, regel)
+        listboxMenu.insert(END, regel)
+
+def haalGeselecteerdeRijOp(event):
+    #bepaal op welke regel er geklikt is
+    geselecteerdeRegelInLijst = listboxMenu.curselection()[0] 
+    #haal tekst uit die regel
+    geselecteerdeTekst = listboxMenu.get(geselecteerdeRegelInLijst) 
+    #verwijder tekst uit veld waar je in wilt schrijven, voor het geval er al iets staat
+    invoerveldGeselecteerdePizza.delete(0, END) 
+    #zet tekst in veld
+    invoerveldGeselecteerdePizza.insert(0, geselecteerdeTekst)
 
 ### --------- Hoofdprogramma  ---------------
 
@@ -78,12 +88,25 @@ knopZoekPizza.grid(row=3, column=4)
 labelMogelijkheden = Label(venster, text="Mogelijkheden:")
 labelMogelijkheden.grid(row=4, column=0)
 
-listBoxMenu = Listbox(venster, height=6, width=50)
-listBoxMenu.grid(row=4, column=1, rowspan=6, columnspan=2, sticky="W")
+listboxMenu = Listbox(venster, height=6, width=50)
+listboxMenu.grid(row=4, column=1, rowspan=6, columnspan=2, sticky="W")
+listboxMenu.bind('<<ListboxSelect>>', haalGeselecteerdeRijOp)
+
+listBoxScrollbar = Scrollbar(venster, orient=VERTICAL)
+listBoxScrollbar.grid(row=4, column=3, rowspan=6, sticky="NS")
+
+listboxMenu.config(yscrollcommand=listBoxScrollbar.set)
+listBoxScrollbar.config(command=listboxMenu.yview)
 
 knopToonPizza = Button(venster, text="Toon alle pizza's", command=toonMenuInListbox)
 knopToonPizza.grid(row=4, column=4)
 
+labelPizzaSelecteerd = Label(venster, text="Geselecteerde pizza:")
+labelPizzaSelecteerd.grid(row=10, column=0, sticky="W")
+
+selecteerdePizza = StringVar()
+invoerveldGeselecteerdePizza = Entry(venster, textvariable=selecteerdePizza)
+invoerveldGeselecteerdePizza.grid(row=10, column=1, sticky="W")
 
 
 #reageert op gebruikersinvoer, deze regel als laatste laten staan
